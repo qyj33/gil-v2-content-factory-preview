@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GiL 内容工厂</title>
+  <link rel="stylesheet" href="content_factory.css" />
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand"><span>GiL</span><div><strong>美研情报局</strong><small>Graduate Intelligence Lab</small></div></div>
+    <nav aria-label="工作区"><span class="pages-nav-disabled" aria-disabled="true">Knowledge Hub · 未部署</span><a class="active" href="content_factory.html">内容工厂</a></nav>
+    <p class="side-note">研究事实源 → 内容 → 视觉 → 发布交接</p>
+  </aside>
+  <main>
+  <div id="pagesPreviewBanner" class="pages-preview-banner" role="note">
+    <strong>GitHub Pages · 只读演示数据</strong>
+    <span id="pagesPreviewMeta">真实确定性流水线输出 · 不连接生产数据</span>
+  </div>
+
+    <header>
+      <div><p class="eyebrow">CONTENT INTELLIGENCE</p><h1>内容工厂</h1><p>系统基于已验证的高校项目自动生成候选、正文、视觉计划和交付包。这里用于查看排序依据、生产状态与下一步，不承担手动生产。</p></div>
+      <button id="refresh" class="button secondary" type="button">刷新数据</button>
+    </header>
+
+    <div id="pageState" class="page-state loading" role="status" aria-live="polite">
+      <strong>正在同步 Content Factory</strong><span>读取自动生产、发布与学习治理状态。</span>
+    </div>
+
+    <section class="status-band" aria-label="内容运行状态">
+      <div><span>候选内容</span><strong id="candidateCount">-</strong></div>
+      <div><span>已生成正文</span><strong id="packageCount">-</strong></div>
+      <div><span>视觉 QA 通过</span><strong id="visualCount">-</strong></div>
+      <div><span>Atlas 交接已创建</span><strong id="deliveryCount">-</strong></div>
+    </section>
+
+    <section id="factoryHealth" class="factory-health" aria-label="内容工厂健康与阶段对账">
+      <div class="health-heading">
+        <div><p class="eyebrow">FACTORY HEALTH</p><h2>全链路健康对账</h2></div>
+        <p>每个自动阶段均显示责任方、当前状态、下一步与真实阻塞；这里只读，不提供人工触发生产。</p>
+      </div>
+      <div id="healthMetrics" class="health-metrics" aria-live="polite"></div>
+      <div id="healthStages" class="health-stages" aria-live="polite"></div>
+    </section>
+
+    <section class="decision-layer" aria-label="内容决策与冻结批次">
+      <div class="decision-heading">
+        <div><p class="eyebrow">SELECTION CONTROL</p><h2>排名与冻结批次</h2></div>
+        <p>Configuration 决定质量阈值与 Min / Target / Max；系统自动选择。冻结后，新候选进入下一轮。</p>
+      </div>
+      <div class="decision-grid">
+        <article id="rankingPolicy" class="ranking-policy" aria-live="polite">
+          <strong>正在读取选择策略</strong>
+        </article>
+        <article id="frozenBatch" class="frozen-batch" aria-live="polite">
+          <div class="batch-head"><strong>活动批次</strong><span>读取中</span></div>
+          <div id="batchProgress" class="batch-progress">等待 Task Engine 生产任务</div>
+          <div id="batchCandidates" class="batch-candidates"></div>
+        </article>
+      </div>
+    </section>
+
+    <section id="learningWorkspace" class="learning-workspace" aria-label="效果学习与治理">
+      <div class="learning-heading">
+        <div><p class="eyebrow">PERFORMANCE &amp; LEARNING</p><h2>效果学习与规则治理</h2></div>
+        <p>仅采集公开 / Guest 指标；系统只生成待治理候选，正式规则必须经过独立治理任务与审核。</p>
+      </div>
+      <div id="learningSummary" class="learning-summary" aria-live="polite">
+        <article><span>公开效果快照</span><strong>—</strong><small>正在读取</small></article>
+        <article><span>待治理学习候选</span><strong>—</strong><small>不会自动升级为规则</small></article>
+        <article><span>正式规则</span><strong>—</strong><small>需证据与审核人</small></article>
+        <article><span>生命周期清理</span><strong>—</strong><small>仅在确认发布后执行</small></article>
+      </div>
+      <div id="learningLatest" class="learning-latest"></div>
+    </section>
+
+    <section class="workspace">
+      <aside class="pool">
+        <div class="section-heading"><p class="eyebrow">RANKED CANDIDATES</p><h2>内容候选</h2><p id="poolDescription">按最终分从高到低排序。每个候选仅引用经过验证的 Research Center 项目知识。</p></div>
+        <div id="candidateList" class="candidate-list" aria-live="polite"></div>
+      </aside>
+
+      <article class="detail">
+        <div id="emptyDetail" class="empty"><strong>选择一条候选内容</strong><p>右侧将展示选题、受众、正文、页面计划、视觉 QA 与发布交接状态。</p></div>
+        <div id="detail" hidden>
+          <div class="detail-head">
+            <div><p class="eyebrow">CONTENT DETAIL</p><h2 id="topicTitle"></h2><p id="candidateMeta"></p></div>
+            <div class="production-state"><span id="productionState" class="state"></span><p id="nextAction"></p></div>
+          </div>
+
+          <section class="summary-grid">
+            <div><span>目标读者</span><strong id="targetAudience"></strong></div>
+            <div><span>AI 推荐角度</span><strong id="recommendedAngle"></strong></div>
+          </section>
+
+          <section class="score-section">
+            <div class="section-label"><h3>排序依据</h3><span id="finalScore" class="score"></span></div>
+            <div id="scoreBreakdown" class="score-breakdown"></div>
+            <p>综合分由时效、权威、申请者价值、决策价值、业务价值、画像匹配和知识价值构成；每项保留可解释理由。</p>
+          </section>
+
+          <section id="contentSection" class="content-section" hidden>
+            <div class="section-label"><h3>正文内容</h3><span id="contentStatus" class="state"></span></div>
+            <h2 id="contentTitle"></h2><p id="contentHook" class="hook"></p>
+            <div id="claimCoverage" class="claim-coverage" aria-label="结论证据覆盖"></div>
+            <div id="contentBody" class="body"></div>
+            <p id="hashtags" class="hashtags"></p>
+          </section>
+
+          <section id="visualSection" class="content-section" hidden>
+            <div class="section-label"><h3>视觉与 QA</h3><span id="visualState" class="state"></span></div>
+            <div id="visualGovernance" class="visual-governance" aria-label="视觉治理决策"></div>
+            <div id="visualPlan" class="page-plan"></div>
+            <div id="visualGallery" class="visual-gallery" aria-label="六页视觉成品"></div>
+            <ul id="qaRules" class="qa-rules" aria-label="视觉质量检查"></ul>
+          </section>
+
+          <section class="trace-section">
+            <h3>证据与交接</h3>
+            <div id="evidenceList" class="evidence-list"></div>
+            <div id="deliveryManifest" class="delivery-manifest"></div>
+            <div id="publishingWorkspace" class="publishing-workspace" aria-label="发布工作区"></div>
+            <div id="traceDetail" class="trace-detail"></div>
+          </section>
+        </div>
+      </article>
+    </section>
+  </main>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script src="content_factory_preview_data.js"></script>
+  <script src="content_factory_preview_bootstrap.js"></script>
+  <script src="content_factory.js"></script>
+</body>
+</html>
